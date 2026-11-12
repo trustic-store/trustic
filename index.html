@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Trustic</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--text:#16181d;--muted:#6b7280;--line:#e5e7eb;--accent:#e8590c;--accent-t:#fff;--ok:#16a34a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1115;--card:#181b22;--text:#eceef2;--muted:#9aa3b2;--line:#2a2f3a;--accent:#ff8a3d;--accent-t:#1a1a1a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1115;--card:#181b22;--text:#eceef2;--muted:#9aa3b2;--line:#2a2f3a;--accent:#ff8a3d;--accent-t:#1a1a1a;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:center;padding:12px 16px}
+.logo{font-weight:800;font-size:20px;cursor:pointer;white-space:nowrap}.logo span{color:var(--accent)}
+#q{flex:1;min-width:0;padding:10px 14px;border:1px solid var(--line);border-radius:999px;background:var(--bg);color:var(--text);font:inherit}
+button{font:inherit;cursor:pointer}
+.ib{border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:999px;padding:9px 13px}
+.btn{background:var(--accent);color:var(--accent-t);border:0;border-radius:10px;padding:13px 20px;font-weight:700;width:100%}
+.btn.sec{background:transparent;color:var(--text);border:1px solid var(--line)}
+main{max-width:1100px;margin:0 auto;padding:16px}
+.cats{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px}
+.chip{flex:none;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:999px;padding:7px 16px}
+.chip.on{background:var(--accent);color:var(--accent-t);border-color:var(--accent)}
+.list{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.card img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.card .b{padding:12px}.card h3{margin:0 0 4px;font-size:16px}
+.row{display:flex;gap:16px;padding:12px}.row img{width:160px;height:160px;aspect-ratio:auto;border-radius:10px;flex:none}.row .b{padding:0;min-width:0}.row h3{font-size:18px}
+.sd{margin:6px 0;color:var(--muted);font-size:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dots{margin-top:6px}.dots i{width:16px;height:16px;border-radius:50%;border:1px solid var(--line);display:inline-block;margin-right:4px;vertical-align:middle}
+.sw{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}.sb{width:38px;height:38px;border-radius:50%;border:2px solid var(--line);padding:0;outline-offset:2px}.sb.on{outline:3px solid var(--accent)}
+@media(max-width:520px){.row img{width:110px;height:110px}.row{gap:12px}}
+.price{font-weight:800;font-size:18px}.old{color:var(--muted);text-decoration:line-through;font-weight:400;font-size:14px;margin-left:6px}
+.tag{color:var(--muted);font-size:13px}
+.back{background:none;border:0;color:var(--accent);padding:4px 0 12px;font-weight:600}
+.detail{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+@media(max-width:720px){.detail{grid-template-columns:1fr}}
+.main-img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:14px;border:1px solid var(--line)}
+.thumbs{display:flex;gap:8px;margin-top:10px;overflow-x:auto}
+.thumbs img{width:68px;height:68px;object-fit:cover;border-radius:8px;border:2px solid var(--line);cursor:pointer;flex:none}
+.thumbs img.on{border-color:var(--accent)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+table{width:100%;border-collapse:collapse;margin-top:8px}td{padding:8px 0;border-bottom:1px solid var(--line);vertical-align:top}td:first-child{color:var(--muted);width:40%}
+label{display:block;font-weight:600;margin:12px 0 4px;font-size:14px}
+input,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--text);font:inherit}
+.qty{display:flex;align-items:center;gap:10px}.qty button{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--text);font-size:20px}.qty input{width:70px;text-align:center}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:flex-end;justify-content:center;z-index:20}
+.modal.on{display:flex}
+.sheet{background:var(--card);width:100%;max-width:480px;max-height:92vh;overflow:auto;border-radius:18px 18px 0 0;padding:20px}
+@media(min-width:600px){.modal{align-items:center}.sheet{border-radius:18px}}
+.done{text-align:center;padding:20px 6px}.done .tick{width:64px;height:64px;border-radius:50%;background:var(--ok);color:#fff;font-size:34px;display:grid;place-items:center;margin:0 auto 12px}
+.err{color:#dc2626;font-size:13px;min-height:16px}
+.empty{text-align:center;color:var(--muted);padding:40px}
+.ord{border-bottom:1px solid var(--line);padding:10px 0;font-size:14px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo" onclick="location.hash=''">Trust<span>ic</span></div>
+  <input id="q" type="search" placeholder="Search products…" aria-label="Search">
+  <button class="ib" onclick="location.hash='orders'">My Orders</button>
+  <button class="ib" id="themeBtn" aria-label="Toggle theme">🌙</button>
+</header>
+<main id="app"></main>
+
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+
+<script>
+/* ====== EDIT YOUR PRODUCTS HERE ======
+   images: list of photo URLs (leave empty to show a placeholder). */
+const STORE_NAME = "Trustic";
+/* Get a FREE access key at https://web3forms.com (enter your email, they send you the key).
+   Every order is then emailed to you. */
+const WEB3FORMS_KEY = "PASTE_YOUR_ACCESS_KEY_HERE";
+const PRODUCTS = [
+  {id:"p1",name:"Classic Leather Wallet",cat:"Accessories",price:899,old:1299,emoji:"👛",hue:25,desc:"Slim genuine-leather wallet with 6 card slots, a coin pocket and RFID protection. Ages beautifully with use.",specs:{Material:"Genuine leather",Colour:"Brown",Slots:"6 cards + 2 notes",Warranty:"6 months"},images:[]},
+  {id:"p2",name:"Wireless Earbuds Pro",cat:"Electronics",price:1999,old:2999,emoji:"🎧",hue:215,desc:"Bluetooth 5.3 earbuds with noise reduction, 24-hour battery with case and a sweat-proof design.",specs:{Battery:"24 hrs with case",Bluetooth:"5.3",Water:"IPX5",Warranty:"1 year"},images:[]},
+  {id:"p3",name:"Steel Water Bottle 1L",cat:"Home",price:549,old:749,emoji:"🧴",hue:170,desc:"Double-wall insulated bottle that keeps drinks cold for 24 hours and hot for 12. Leak-proof lid.",specs:{Capacity:"1 litre",Material:"Stainless steel 304",Cold:"24 hrs",Hot:"12 hrs"},images:[]},
+  {id:"p4",name:"Cotton Everyday T-Shirt",cat:"Clothing",price:399,old:599,emoji:"👕",hue:340,desc:"Soft 100% combed cotton t-shirt with a relaxed fit. Pre-shrunk and colour-fast.",specs:{Fabric:"100% cotton",Fit:"Regular",Sizes:"S, M, L, XL",Wash:"Machine wash"},images:[]},
+  {id:"p5",name:"LED Desk Lamp",cat:"Home",price:1249,old:null,emoji:"💡",hue:50,desc:"Eye-care desk lamp with 3 colour modes, 5 brightness levels and a flexible neck. USB powered.",specs:{Modes:"3 colour, 5 brightness",Power:"USB 5V",Neck:"Flexible",Warranty:"1 year"},images:[]},
+  {id:"p6",name:"Canvas Backpack 25L",cat:"Accessories",price:1499,old:1999,emoji:"🎒",hue:130,desc:"Durable canvas backpack with a padded 15-inch laptop sleeve, water-resistant coating and 3 compartments.",specs:{Capacity:"25 litres",Laptop:"Up to 15\"",Material:"Canvas",Warranty:"6 months"},images:[]}
+];
+/* ====== COLOURS AVAILABLE PER PRODUCT (name + colour code) ====== */
+const COLORS = {
+  p1:[{n:"Brown",c:"#6b4423"},{n:"Black",c:"#1c1c1c"},{n:"Tan",c:"#c49a6c"}],
+  p2:[{n:"Black",c:"#1c1c1c"},{n:"White",c:"#f2f2f2"},{n:"Blue",c:"#2f6fdb"}],
+  p3:[{n:"Silver",c:"#b8bec6"},{n:"Black",c:"#1c1c1c"},{n:"Teal",c:"#139a8a"},{n:"Red",c:"#d23a3a"}],
+  p4:[{n:"White",c:"#f5f5f5"},{n:"Navy",c:"#1d2a52"},{n:"Olive",c:"#6b7a3a"},{n:"Maroon",c:"#7a1f2b"}],
+  p5:[{n:"White",c:"#f5f5f5"},{n:"Black",c:"#1c1c1c"}],
+  p6:[{n:"Olive",c:"#6b7a3a"},{n:"Black",c:"#1c1c1c"},{n:"Grey",c:"#808790"}]
+};
+function pickColor(i){col=COLORS[cur.id][i];$("#cn").textContent=col.n;document.querySelectorAll(".sb").forEach((b,j)=>b.classList.toggle("on",j===i))}
+const CUR = "₹";
+
+const $ = s => document.querySelector(s), app = $("#app");
+let cat = "All", query = "", cur = null, imgIdx = 0, qty = 1, col = null;
+
+function ph(p,i){
+  const h=(p.hue+i*35)%360;
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl(${h},70%,82%)"/><stop offset="1" stop-color="hsl(${h+30},65%,62%)"/></linearGradient></defs><rect width="400" height="400" fill="url(#g)"/><text x="200" y="240" font-size="150" text-anchor="middle">${p.emoji}</text></svg>`;
+  return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
+}
+const imgs = p => (p.images&&p.images.length)?p.images:[0,1,2].map(i=>ph(p,i));
+const money = n => CUR+n.toLocaleString("en-IN");
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function renderList(){
+  const cats=["All",...new Set(PRODUCTS.map(p=>p.cat))];
+  const list=PRODUCTS.filter(p=>(cat==="All"||p.cat===cat)&&(p.name+p.cat+p.desc).toLowerCase().includes(query.toLowerCase()));
+  app.innerHTML=`<div class="cats">${cats.map(c=>`<button class="chip ${c===cat?"on":""}" data-c="${esc(c)}">${esc(c)}</button>`).join("")}</div>
+  ${list.length?`<div class="list">${list.map(p=>`<div class="card row" data-id="${p.id}"><img src="${imgs(p)[0]}" alt="${esc(p.name)}" loading="lazy"><div class="b"><div class="tag">${esc(p.cat)}</div><h3>${esc(p.name)}</h3><div class="price">${money(p.price)}${p.old?`<span class="old">${money(p.old)}</span> <span style="color:var(--ok);font-size:13px;font-weight:700">${Math.round((1-p.price/p.old)*100)}% off</span>`:""}</div><p class="sd">${esc(p.desc)}</p><div class="tag">${Object.entries(p.specs||{}).slice(0,2).map(([k,v])=>`${esc(k)}: ${esc(v)}`).join(" · ")}</div><div class="dots">${(COLORS[p.id]||[]).map(c=>`<i title="${c.n}" style="background:${c.c}"></i>`).join("")}<span class="tag">${(COLORS[p.id]||[]).length} colours</span></div></div></div>`).join("")}</div>`:`<div class="empty">No products found.</div>`}`;
+  app.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{cat=b.dataset.c;renderList()});
+  app.querySelectorAll(".card").forEach(c=>c.onclick=()=>{location.hash=c.dataset.id});
+}
+
+function renderDetail(p){
+  cur=p;imgIdx=0;col=(COLORS[p.id]||[])[0]||null;const im=imgs(p);
+  app.innerHTML=`<button class="back" onclick="location.hash=''">← All products</button>
+  <div class="detail"><div><img class="main-img" id="mi" src="${im[0]}" alt="${esc(p.name)}"><div class="thumbs">${im.map((s,i)=>`<img src="${s}" data-i="${i}" class="${i?"":"on"}" alt="Photo ${i+1}">`).join("")}</div></div>
+  <div><div class="tag">${esc(p.cat)}</div><h1 style="margin:4px 0 8px">${esc(p.name)}</h1>
+  <div class="price" style="font-size:26px">${money(p.price)}${p.old?`<span class="old">${money(p.old)}</span> <span style="color:var(--ok);font-size:14px;font-weight:700">${Math.round((1-p.price/p.old)*100)}% off</span>`:""}</div>
+  <p>${esc(p.desc)}</p>
+  <div class="panel"><b>Product details</b><table>${Object.entries(p.specs||{}).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join("")}</table></div>
+  ${col?`<div class="panel" style="margin-top:14px"><b>Colour: <span id="cn">${esc(col.n)}</span></b><div class="sw">${COLORS[p.id].map((c,i)=>`<button class="sb ${i?"":"on"}" title="${c.n}" aria-label="${c.n}" style="background:${c.c}" onclick="pickColor(${i})"></button>`).join("")}</div></div>`:""}
+  <button class="btn" style="margin-top:16px" onclick="openOrder()">Order now</button></div></div>`;
+  app.querySelectorAll(".thumbs img").forEach(t=>t.onclick=()=>{$("#mi").src=t.src;app.querySelectorAll(".thumbs img").forEach(x=>x.classList.remove("on"));t.classList.add("on")});
+  scrollTo(0,0);
+}
+
+function route(){
+  const id=location.hash.slice(1),p=PRODUCTS.find(x=>x.id===id);
+  if(id==="orders")return renderMyOrders();
+  p?renderDetail(p):renderList();
+}
+addEventListener("hashchange",route);
+$("#q").oninput=e=>{query=e.target.value;if(location.hash)location.hash="";else renderList()};
+
+/* ===== Order flow ===== */
+const modal=$("#modal"),sheet=$("#sheet");
+modal.onclick=e=>{if(e.target===modal)modal.classList.remove("on")};
+function openOrder(){
+  qty=1;
+  sheet.innerHTML=`<h2 style="margin:0 0 4px">Place your order</h2><div class="tag">${esc(cur.name)}${col?` · Colour: ${esc(col.n)}`:""} · ${money(cur.price)} each</div>
+  <label>Quantity</label><div class="qty"><button type="button" id="m">−</button><input id="qt" type="number" min="1" max="99" value="1" inputmode="numeric"><button type="button" id="pl">+</button><b id="tot" style="margin-left:auto"></b></div>
+  <label>Full name *</label><input id="nm" autocomplete="name">
+  <label>Phone number *</label><input id="ph" type="tel" inputmode="tel" autocomplete="tel">
+  <label>Email *</label><input id="em" type="email" autocomplete="email">
+  <label>Delivery address *</label><textarea id="ad" rows="3" autocomplete="street-address"></textarea>
+  <label>Note (optional)</label><input id="nt" placeholder="Size, colour, delivery time…">
+  <div class="err" id="er"></div>
+  <button class="btn" id="go" style="margin-top:8px">Confirm order</button>
+  <button class="btn sec" style="margin-top:8px" onclick="modal.classList.remove('on')">Cancel</button>`;
+  modal.classList.add("on");
+  const upd=()=>{qty=Math.max(1,Math.min(99,parseInt($("#qt").value)||1));$("#qt").value=qty;$("#tot").textContent=money(qty*cur.price)};
+  $("#m").onclick=()=>{$("#qt").value=qty-1;upd()};$("#pl").onclick=()=>{$("#qt").value=qty+1;upd()};$("#qt").onchange=upd;upd();
+  $("#go").onclick=submitOrder;
+}
+
+async function submitOrder(){
+  const v=id=>$(id).value.trim(),o={product:cur.name+(col?" ("+col.n+")":""),productId:cur.id,quantity:qty,total:qty*cur.price,name:v("#nm"),phone:v("#ph"),email:v("#em"),address:v("#ad"),note:v("#nt"),at:new Date().toISOString()};
+  if(!o.name||!o.phone||!o.email||!o.address)return $("#er").textContent="Please fill all required fields.";
+  if(!/^\+?[\d\s-]{8,15}$/.test(o.phone))return $("#er").textContent="Enter a valid phone number.";
+  if(!/^\S+@\S+\.\S+$/.test(o.email))return $("#er").textContent="Enter a valid email.";
+  $("#go").disabled=true;$("#go").textContent="Placing order…";
+  let ok=false,errMsg="";
+  if(WEB3FORMS_KEY.startsWith("PASTE")){$("#go").disabled=false;$("#go").textContent="Confirm order";$("#er").textContent="Setup needed: add your Web3Forms access key in index.html (see WEB3FORMS_KEY).";return}
+  try{
+    const r=await fetch("https://api.web3forms.com/submit",{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},
+      body:JSON.stringify({access_key:WEB3FORMS_KEY,subject:"New order: "+o.product,from_name:STORE_NAME,name:o.name,email:o.email,phone:o.phone,product:o.product,quantity:o.quantity,total:money(o.total),address:o.address,note:o.note||"-"})});
+    const j=await r.json();ok=j.success===true;if(!ok)errMsg=j.message||"";
+  }catch(e){console.error(e);errMsg="network problem, check your internet"}
+  if(!ok){$("#go").disabled=false;$("#go").textContent="Confirm order";$("#er").textContent="Sorry, we couldn\u2019t place your order"+(errMsg?" ("+errMsg+")":"")+". Please try again.";return}
+  try{const l=getMine();l.push(o);localStorage.setItem("trustic_orders",JSON.stringify(l))}catch(e){}
+  sheet.innerHTML=`<div class="done"><div class="tick">✓</div><h2 style="margin:0 0 8px">Order confirmed!</h2>
+  <p>Thank you, ${esc(o.name)}. Your order for <b>${o.quantity} × ${esc(o.product)}</b> (${money(o.total)}) is confirmed.</p>
+  <p>Our team will contact you shortly to confirm it.</p>
+  <button class="btn" onclick="modal.classList.remove('on');location.hash='orders'">View my orders</button>
+  <button class="btn sec" style="margin-top:8px" onclick="modal.classList.remove('on');location.hash=''">Continue shopping</button></div>`;
+}
+
+/* ===== My orders (saved on the customer's own device) ===== */
+function getMine(){try{return JSON.parse(localStorage.getItem("trustic_orders")||"[]")}catch(e){return[]}}
+function renderMyOrders(){
+  const l=getMine().sort((a,b)=>b.at.localeCompare(a.at));
+  app.innerHTML=`<button class="back" onclick="location.hash=''">\u2190 Continue shopping</button><h1 style="margin:0 0 12px">My orders</h1>`+(l.length?l.map(o=>`<div class="panel" style="margin-bottom:12px"><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between"><b>${esc(o.quantity)} \u00d7 ${esc(o.product)}</b><span style="color:var(--ok);font-weight:700">Awaiting confirmation</span></div><div class="price" style="margin:4px 0">${money(o.total)}</div><div class="tag">\ud83d\udccd ${esc(o.address)}</div><div class="tag">\ud83d\udcde ${esc(o.phone)} \u00b7 \u2709\ufe0f ${esc(o.email)}</div><div class="tag">${new Date(o.at).toLocaleString()}</div></div>`).join(""):`<div class="empty">You haven\u2019t placed any orders yet.</div>`)+`<p class="tag">Your orders are saved on this device only.</p>`;
+}
+
+/* ===== Theme ===== */
+function setTheme(t){document.documentElement.dataset.theme=t;$("#themeBtn").textContent=t==="dark"?"☀️":"🌙";try{localStorage.setItem("theme",t)}catch(e){}}
+let saved=null;try{saved=localStorage.getItem("theme")}catch(e){}
+setTheme(saved||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));
+$("#themeBtn").onclick=()=>setTheme(document.documentElement.dataset.theme==="dark"?"light":"dark");
+
+route();
+</script>
+</body>
+</html>
